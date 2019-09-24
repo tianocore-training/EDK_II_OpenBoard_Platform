@@ -475,14 +475,15 @@ The lack of coupling between feature packages is achieved through feature integr
 - Feature entry points should be in the main feature module entry point specified in the INF.
 
 
----?image=assets/images/slides/Slide12.JPG
+---?image=assets/images/slides/Slide13.JPG
 @title[MPA Dependency Rules]
 <p align="right"><span class="gold" >@size[1.1em](<b>MPA Dependency Rules</b>)</span></span></p>
 
 @snap[south-west span-35 ]
 <p style="line-height:38%" align="left" ><span style="font-size:0.47em;" >
 Key: <br>
-Bottom triangles can only depend on shapes above them except for @color[yellow](<font face="Consolas">XxxOpenBoardPkg</font>) can also depend on Advanced feature packages
+Bottom triangles can only depend on shapes above them <br>
+<font face="Consolas">XxxFeaturePkg </font> - represents multiple feature package intances
 </span></p>
 @snapend
 
