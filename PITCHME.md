@@ -11,7 +11,7 @@
 Note:
   PITCHME.md for UEFI / EDK II Training  EDK II OpenBoard Platform and Porting  
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2020, Intel Corporation. All rights reserved.<BR>
 
   Redistribution and use in source (original document form) and 'compiled'
   forms (converted to PDF, epub, HTML and other formats) with or without
@@ -100,28 +100,30 @@ Why can’t the platform tree structures bear more similarity?
 
 ---
 @title[Goals]
-<p align="right"><span class="gold" >@size[1.1em](<b>GOALS</b>)</span><br>
-<span style="font-size:0.85em;" ><b>Minimum Platform Architecture (MPA)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></span></p>
+<p align="right"><span class="gold" >@size[1.1em](<b>GOALS</b>)</span><br></p>
+@snap[north-west span-100 ]
+<p style="line-height:20% "><span style="font-size:0.85em;" ><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Minimum Platform Architecture (MPA)</b></span></p>
+@snapend
 
 
 @snap[north-west span-30 ]
 <br>
 <br>
-<br>
-@box[bg-green-pp text-white rounded my-box-pad2  ](<p style="line-height:60% "><span style="font-size:0.9em;" ><b>Simple</b><br><br>&nbsp;</span></p>)
+@box[bg-green-pp text-white rounded my-box-pad2  ](<p style="line-height:60% "><span style="font-size:0.9em;" ><b>Structured</b><br><br>&nbsp;</span></p>)
+@box[bg-green-pp text-white rounded my-box-pad2  ](<p style="line-height:60%"><span style="font-size:0.9em;" ><b>Approachable</b><br><br>&nbsp;</span></p>)
 @box[bg-green-pp text-white rounded my-box-pad2  ](<p style="line-height:60%"><span style="font-size:0.9em;" ><b>Portable</b><br><br>&nbsp;</span></p>)
-@box[bg-green-pp text-white rounded my-box-pad2  ](<p style="line-height:60%"><span style="font-size:0.9em;" ><b>Consistent</b><br><br>&nbsp;</span></p>)
-@box[bg-green-pp text-white rounded my-box-pad2  ](<p style="line-height:60%"><span style="font-size:0.9em;" ><b>Code<br>Convergence</b><br>&nbsp;</span></p>)
+@box[bg-green-pp text-white rounded my-box-pad2  ](<p style="line-height:60%"><span style="font-size:0.9em;" ><b>Reusable<br></b><br>&nbsp;</span></p>)
+@box[bg-green-pp text-white rounded my-box-pad2  ](<p style="line-height:60%"><span style="font-size:0.9em;" ><b>Testable<br></b><br>&nbsp;</span></p>)
 @snapend
 
 
 @snap[north-east span-67 ]
 <br>
-<br>
-@css[text-white fragment](<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" ><br>Code structure should be obvious so that the firmware developer can easily turn on or turn off a significant feature<br></span></p>)
-@css[text-white fragment](<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" >Firmware developer can easily port and enable a new board.<br><br> </span></p>)
-@css[text-white fragment](<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" >Firmware code structure should be independent of processor/silicon architecture or platform type &lpar;embedded, workstation, server, etc.&rpar;<br></span></p>)
-@css[text-white fragment](<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" >One instance of code per task</span></p>)
+@css[text-white fragment](<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" ><br>Enable developers to consistently navigate code, boot flow, and the functional results<br><br></span></p>)
+@css[text-white fragment](<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" >Enable developers to quickly produce a baseline that is extensible with minimal UEFI or EDK II knowledge<br><br> </span></p>)
+@css[text-white fragment](<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" >Minimize coupling between common, silicon, platform, board, and feature packages<br><br></span></p>)
+@css[text-white fragment](<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" >Enable large granularity binary reuse &lpar;FV binaries&rpar;<br><br></span></p>)
+@css[text-white fragment](<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" >Enable validating the correctness of a port</span></p>)
 @snapend
 
 @snap[south span-85 fragment]
@@ -156,7 +158,7 @@ Goal is to provide some guidance on how to design open source EDK II  IA firmwar
 <br>
 <br>
 @box[bg-grey-85-trans text-black rounded my-box-pad2 fragment ](<p style="line-height:60% "><span style="font-size:0.7em;" >System firmware (BIOS ) is the largest payload in the IFWI binary image  &nbsp;</span></p>)
-@box[bg-grey-85-trans text-black rounded my-box-pad2 fragment ](<p style="line-height:60% "><span style="font-size:0.7em;" >Platform implementation is ~2-3 million lines+ of “C” code <br>&nbsp;</span></p>)
+@box[bg-grey-85-trans text-black rounded my-box-pad2 fragment ](<p style="line-height:60% "><span style="font-size:0.7em;" >Platform implementation is ~2-3 <b>million</b> lines+ of “C” code <br>&nbsp;</span></p>)
 @box[bg-grey-85-trans text-black rounded my-box-pad2 fragment ](<p style="line-height:60% "><span style="font-size:0.7em;" >Technology complexity increasing, strains firmware implementation solutions &nbsp;</span></p>)
 @box[bg-grey-85-trans text-black rounded my-box-pad2 fragment ](<p style="line-height:60% "><span style="font-size:0.7em;" >Limited firmware engineering recourses  <br>&nbsp;</span></p>)
 @snapend
@@ -220,7 +222,7 @@ Note:
 - The easier we make it to access, understand, fix, improve, and optimize Intel firmware (ideally through single instance, high quality code) we can better engage with our customers building real world solutions to improve Intel product quality (all Intel products including those without EDK II firmware).
 
 
----?image=assets/images/slides/Slide7_1.JPG
+---?image=assets/images/slides/Slide8.JPG
 @title[MinPlatform + Intel® Firmware Support Package]
 <p align="right"><span class="gold" >@size[1.001em](<b>MinPlatform @color[yellow](+) Intel® Firmware Support Package</b>)</span><br>
 <span style="font-size:0.7em;" ><b>(Intel® FSP)</b></span></p>
@@ -264,8 +266,30 @@ Note:
   - Scalable from pre-silicon to derivatives
 
 
+---?image=assets/images/slides/Slide9.JPG
+@title[What are Minimum Platform Stages?]
+<p align="right"><span class="gold" >@size[1.001em](<b>What are Minimum Platform Stages?</b>)</span><br>
+<span style="font-size:0.7em;" ></span></p>
 
----?image=assets/images/slides/Slide8.JPG
+@snap[south span-85 fragment]
+@box[bg-purple-pp text-white rounded my-box-pad2  ](<p style="line-height:60%"><span style="font-size:0.8em">Stages reflect firmware development lifecycle and how a system bootstraps itself<br>&nbsp;</span></p>)
+@snapend
+
+Note:
+Open source - As firmware engineers we need to make Intel products easy to work with and keep more secure. 
+
+
+Benefits:
+
+Open source allows us to improve customer engagement with all customers, build transparency and trust, reduce overhead translating internal and external process, and deploy fixes across the ecosystem more rapidly.
+
+Main point: Open source is not more work if you do your work in open source. This may be hard to imagine because today's code is too monolithic for this to be possible. A software architecture that allows modular pieces to be integrated from open source into closed source solutions is necessary.
+
+The easier we make it to access, understand, fix, improve, and optimize Intel firmware (ideally through single instance, high quality code) we can better engage with our customers building real world solutions to improve Intel product quality (all Intel products including those without EDK II firmware).
+
+
+
+---?image=assets/images/slides/Slide10.JPG
 @title[Four Focus Areas Section]
 <br>
 <p align="left"><span class="gold" >@size[1.1em](<b>Four Focus Areas</b>)</span></span></p>
@@ -275,12 +299,12 @@ Note:
 <br>
 
 <ul style="list-style-type:disc; line-height:0.7;">
-  <li><span style="font-size:0.65em" >Minimal /Full BIOS </span> </li>
+  <li><span style="font-size:0.65em" >Staged Minimal Baseline </span> </li>
   <li><span style="font-size:0.65em" >Feature ON/OFF </span> </li>
   <ul style="list-style-type:disc; line-height:0.6;">
-  <li><span style="font-size:0.6em" >SMBIOS</span> </li>
-  <li><span style="font-size:0.6em" >TPM </span> </li>
-  <li><span style="font-size:0.6em" >Secure Boot </span> </li>
+  <li><span style="font-size:0.6em" >Debug</span> </li>
+  <li><span style="font-size:0.6em" >I/O Devices  </span> </li>
+  <li><span style="font-size:0.6em" >User Interface </span> </li>
   <li><span style="font-size:0.6em" >. . . </span> </li>
   </ul>
 </ul>
@@ -289,8 +313,8 @@ Note:
 @snap[south-west span-30 fragment]
 <br>
 <ul style="list-style-type:disc; line-height:0.7;">
-  <li><span style="font-size:0.65em" >Setup Variable</span> </li>
-  <li><span style="font-size:0.65em" >PCD </span> </li>
+  <li><span style="font-size:0.65em" >Staged</span> </li>
+  <li><span style="font-size:0.65em" >Defined PCD </span> </li>
   <li><span style="font-size:0.65em" >Policy Hob/PPI/Protocol </span> </li>
 </ul>
 <br>
@@ -301,6 +325,7 @@ Note:
 @snap[south-east span-33 fragment]
 <br>
 <ul style="list-style-type:disc; line-height:0.7;">
+  <li><span style="font-size:0.65em" >Staged </span> </li>
   <li><span style="font-size:0.65em" >GPIO </span> </li>
   <li><span style="font-size:0.65em" >SIO </span> </li>
   <li><span style="font-size:0.65em" >ACPI </span> </li>
@@ -323,7 +348,7 @@ In order to provide suggestions on the problem statements earilier, we need to f
 - Tree Structure. What does an EDKII platform package look like? 
 
 
----?image=assets/images/slides/Slide9.JPG
+---?image=assets/images/slides/Slide11.JPG
 @title[Tree Structure Section]
 <br>
 <p align="left"><span class="gold" >@size[1.1em](<b>Tree Structure</b>)</span></span></p>
@@ -335,7 +360,7 @@ Tree Structure. What does an EDK II platform package look like?
 
 This is the directory structure of our EDK II platform in relationship to the whole and other areas, such as the boot flow, or kernel, or core.
 
----?image=assets/images/slides/Slide10.JPG
+---?image=assets/images/slides/Slide12.JPG
 @title[Organization]
 <p align="right"><span class="gold" >@size[1.1em](<b>Organization</b>)</span></span></p>
 
@@ -394,7 +419,7 @@ The architecture makes use of four primary classifications of code that are gene
   - Producer(s): Silicon vendor
 
 
----?image=assets/images/slides/Slide11.JPG
+---?image=assets/images/slides/Slide13.JPG
 @title[Package Organization Example]
 <p align="right"><span class="gold" >@size[1.1em](<b>Package Organization Example</b>)</span></span></p>
 
@@ -475,21 +500,21 @@ The lack of coupling between feature packages is achieved through feature integr
 - Feature entry points should be in the main feature module entry point specified in the INF.
 
 
----?image=assets/images/slides/Slide13.JPG
+---?image=assets/images/slides/Slide14.JPG
 @title[MPA Dependency Rules]
 <p align="right"><span class="gold" >@size[1.1em](<b>MPA Dependency Rules</b>)</span></span></p>
 
 @snap[south-west span-35 ]
 <p style="line-height:38%" align="left" ><span style="font-size:0.47em;" >
 Key: <br>
-Bottom triangles can only depend on shapes above them <br>
-<font face="Consolas">XxxFeaturePkg </font> - represents multiple feature package intances
+Bottom shapes can only depend on shapes above them <br>
+<font face="Consolas">XxxFeaturePkg </font> - represents multiple feature package intances that are mutually exclusive to each other
 </span></p>
 @snapend
 
 @snap[south-east span-40 ]
 <p style="line-height:40%" align="right" ><span style="font-size:0.5em;" >
-<font face="Consolas">BoardAbc</font> – directory for <font face="Consolas">OpenBoardPkg.dsc</font>
+<font face="Consolas">BoardAbc</font> – directory for <font face="Consolas">@color[cyan](OpenBoardPkg.dsc)</font>
 </span></p>
 @snapend
 
@@ -499,7 +524,7 @@ Note:
 - The packages must be flexible. In particular, the organization of advanced feature is expected to change over time dynamically adjusting to business and technical demands. Therefore, the following dependency rules are in place:
 - MinPlatformPkg should only depend upon EDK II Green H packages (i.e. MdePkg and MdeModulePkg)
 - BoardModulePkg can only depend Green H packages and MinPlatformPkg
-- xxxOpenBoardPkg can depend on non-deprecated packages in edk2, MinPlatformPkg, and xxxFeaturePkg instances.
+- xxxOpenBoardPkg can depend on non-deprecated packages in edk2, MinPlatformPkg, BoardModulePkg, and xxxFeaturePkg instances
 - BoardAbc is the directory for the OpenBoardPkg.dsc file and has implied dependency xxxOpenBoardPkg, MinPlatformPkg and XxxFeaturePkg
 - xxxFeaturePkg 
   -  can only depend on non-deprecated packages in edk2.
@@ -507,7 +532,7 @@ Note:
 
 
 
----?image=assets/images/slides/Slide10.JPG
+---?image=assets/images/slides/Slide13.JPG
 @title[Open Source EDK II Workspace]
 <p align="right"><span class="gold" >@size[1.1em](<b>Open Source EDK II Workspace</b>)</span></span></p>
 
@@ -568,7 +593,7 @@ The architecture is designed to support a maintainer ownership model. For exampl
 
 
 
----?image=assets/images/slides/Slide10.JPG
+---?image=assets/images/slides/Slide13.JPG
 @title[Open Board Tree Structure]
 <p align="right"><span class="gold" >@size[1.1em](<b>Open Board Tree Structure</b>)</span></span></p>
 
@@ -594,12 +619,12 @@ The architecture is designed to support a maintainer ownership model. For exampl
        KabylakeOpenBoardPkg/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           KabylakeRvp3/ <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
        MinPlatformPkg/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       Vlv2TbltDevicePkg/<br>&nbsp;&nbsp;&nbsp;&nbsp;
+       <br>&nbsp;&nbsp;&nbsp;&nbsp;
   Silicon/ <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
      Intel/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       KabylakeSiliconPkg/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       &nbsp;. &nbsp;. &nbsp;./<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       Vlv2DeviceRefCodePkg/<br>&nbsp;&nbsp;
+       KabylakeSiliconPkg/<br>&nbsp;&nbsp;&nbsp;&nbsp;
+  Features/ Intel /     . &nbsp;. &nbsp;. &nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       <br>&nbsp;&nbsp;
 @color[yellow](edk2-non-osi)/<a href="https://github.com/tianocore/edk2-non-osi/tree/devel-MinPlatform">github.com/edk2-non-osi</a><br>&nbsp;&nbsp;&nbsp;&nbsp;
   Silicon/<br>&nbsp;&nbsp;
 @color[yellow](FSP)/<a href="https://github.com/IntelFsp/FSP">github.com/Intel/FSP</a><br>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -625,7 +650,7 @@ The architecture is designed to support a maintainer ownership model. For exampl
 <br>
 <br>
 @color[#A8ff60](&larr;)&nbsp;@color[#FFC000](<font face="Arial">Silicon</font>)<br>
-<br>
+@color[#A8ff60](&larr;)&nbsp;@color[#FFC000](<font face="Arial">Advanced Features</font>)<br>
 <br>
 <br>
 <br>
@@ -654,12 +679,15 @@ Not shown is the edk2 repository since this should always be considered as commo
   <ul style="list-style-type:disc; line-height:0.7;">
     <li><span style="font-size:0.65em" >@color[cyan](BoardModulePkg ): generic Board functionality (board lib interfaces) </span> </li>
     <li><span style="font-size:0.65em" >@color[cyan](MinPlatformPkg ): generic platform instance to control the boot flow.  </span> </li>
-    <li><span style="font-size:0.65em" >@color[cyan](XxxFeaturePkg ): package to hold the Xxx advanced platform features </span> </li>
     <li><span style="font-size:0.65em" >@color[cyan](&lt;Generation&gt;OpenBoardPkg ): the silicon generation specific board package. All of the boards based upon this silicon generation can be located here </span> </li>
  </ul>
   <li><span style="font-size:0.65em" >Silicon folder : contains the silicon specific modules </span> </li>
   <ul style="list-style-type:disc; line-height:0.7;">
     <li><span style="font-size:0.65em" >@color[cyan](&lt;Generation&gt;SiliconPkg ): the silicon generation specific silicon package </span> </li>
+  </ul>
+  <li><span style="font-size:0.65em" >Features/Intel Folder : contains Advanced features packages </span> </li>
+  <ul style="list-style-type:disc; line-height:0.7;">
+    <li><span style="font-size:0.65em" >@color[cyan](&lt;XxxFeature&gt;Pkg ): package and modules for advanced features </span> </li>
   </ul>
 </ul>
 
@@ -858,9 +886,10 @@ Note:
 @snap[north-west span-100 ]
 <br>
 <p style="line-height:40% "><span style="font-size:0.5em; font-family:Consolas;" ><br>&nbsp;&nbsp;
-@color[cyan](XxxFeaturePkg)  /<br>&nbsp;&nbsp;&nbsp;&nbsp;
-  Include /<br>&nbsp;&nbsp;&nbsp;&nbsp;
-  Library /<br>&nbsp;&nbsp;&nbsp;&nbsp;
+Features/Intel/ <br>&nbsp;&nbsp;&nbsp;&nbsp;
+@color[cyan](XxxFeaturePkg)  /<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  Include /<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  Library /<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   Readme.md /
 </span></p>
 <br>
@@ -984,123 +1013,28 @@ The common board related ACPI is in Acpi directory. The common board related FSP
 
 The KabylakeRvp3 folder contains all RVP3 related settings, such as GPIO, High Definition Audio (HAD) verb Table, HsioPtss table, SPD table. This folder also has DSC and FDF file. We can build a KabylakeRvp3 binary inside of this folder 
 
----
-@title[Compare to MinnowBoard  MAX/Turbot]
-<p align="right"><span class="gold" >@size[1.1em](<b>Compare to MinnowBoard  MAX/Turbot</b>)</span><span style="font-size:0.8em;" ><br></span></p>
 
-@snap[north-west span-100 ]
-<br>
-<br>
-@box[bg-black text-white rounded my-box-pad2  ](<p style="line-height:60% "><span style="font-size:0.9em;" ><br><br><br><br><br><br><br><br><br><br><br>&nbsp;</span></p>)
-@snapend
-
-
-
-@snap[north-west span-35 ]
-<br>
-<p style="line-height:40% "><span style="font-size:0.5em; font-family:Consolas;" ><br>&nbsp;&nbsp;
-@color[cyan](Vlv2TbltDevicePkg)  /<br>&nbsp;&nbsp;&nbsp;&nbsp;
-   AcpiPlatform/<br>&nbsp;&nbsp;&nbsp;&nbsp;
-   Application /<br>&nbsp;&nbsp;&nbsp;&nbsp;
-   BootScriptSaveDxe /<br>&nbsp;&nbsp;&nbsp;&nbsp;
-   FspAzaliaConfigData /<br>&nbsp;&nbsp;&nbsp;&nbsp;
-   FspSupport /<br>&nbsp;&nbsp;&nbsp;&nbsp;
-   FvbRuntimeDxe /<br>&nbsp;&nbsp;&nbsp;&nbsp;
-   FvInfoPei  /<br>&nbsp;&nbsp;&nbsp;&nbsp;
-   Include /<br>&nbsp;&nbsp;&nbsp;&nbsp;
-   IntelGopDepex /<br>&nbsp;&nbsp;&nbsp;&nbsp;
-   Library /<br>&nbsp;&nbsp;&nbsp;&nbsp;
-   Logo /<br>&nbsp;&nbsp;&nbsp;&nbsp;
-   Metronome /<br>&nbsp;&nbsp;&nbsp;&nbsp;
-   MonoStatusCode /
-</span></p>
-@snapend
-
-@snap[north span-35 ]
-<br>
-<p style="line-height:40% " align="left"><span style="font-size:0.5em; font-family:Consolas;" ><br>&nbsp;&nbsp;
-  Override /<br>&nbsp;&nbsp;
-  PciPlatform /<br>&nbsp;&nbsp;
-  PlatformCpuInfoDxe /<br>&nbsp;&nbsp;
-  PlatformDxe /<br>&nbsp;&nbsp;
-  PlatformGopPolicy /<br>&nbsp;&nbsp;
-  PlatformInfoDxe /<br>&nbsp;&nbsp;
-  PlatformInitPei /<br>&nbsp;&nbsp;
-  PlatformPei /<br>&nbsp;&nbsp;
-  PlatformSetupDxe /<br>&nbsp;&nbsp;
-  PlatformSmm /<br>&nbsp;&nbsp;
-  PpmPolicy /<br>&nbsp;&nbsp;
-  SaveMemoryConfig /<br>&nbsp;&nbsp;
-  SmBiosMiscDxe /<br>&nbsp;&nbsp;
-</span></p>
-@snapend
-
-
-@snap[north-east span-35 ]
-<br>
-<p style="line-height:40% " align="left"><span style="font-size:0.5em; font-family:Consolas;" ><br>&nbsp;&nbsp;
-  SmmSwDispatch2OnSmm /<br>&nbsp;&nbsp;
-  SwDispatchThunk /<br>&nbsp;&nbsp;
-  SmramSaveInfoHandlerSmm /<br>&nbsp;&nbsp;
-  Stitch /<br>&nbsp;&nbsp;
-  UiApp /<br>&nbsp;&nbsp;
-  VlvPlatformInitDxe /<br>&nbsp;&nbsp;
-  Wpce791 /<br>&nbsp;&nbsp;
-<br>&nbsp;&nbsp;
-  PlatformPkg.dec  <br>&nbsp;&nbsp;
-  PlatformPkg.dsc  <br>&nbsp;&nbsp;
-  PlatformPkg.fdf
-</span></p>
-@snapend
-
-
-@snap[north-east span-25 fragment]
-<br>
-<p style="line-height:40% " align="left"><span style="font-size:0.5em; font-family:Consolas;" ><br>&nbsp;&nbsp;
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @fa[long-arrow-alt-left fa-3x gp-bullet-yellow]
-  
-</span></p>
-@snapend
-
-@snap[south span-85 fragment]
-@box[bg-purple-pp text-white rounded my-box-pad2  ](<p style="line-height:40%"><span style="font-size:0.8em">This introduces issues when searching for a driver<br><br>&nbsp;</span></p>)
-<br>
-@snapend
-
-
-Note:
-This introduces issues when the developer wants to find a  particular driver. 
-
-
----?image=assets/images/slides/Slide23.JPG
+---?image=assets/images/slides/Slide24.JPG
 @title[Focus - Features Section]
 <br>
 <p align="left"><span class="gold" >@size[1.1em](<b>Features</b>)</span></span></p>
 
-@snap[north-east span-35 ]
+
+@snap[north-east span-35 fragment]
 <br>
 <br>
 
 <ul style="list-style-type:disc; line-height:0.7;">
-  <li><span style="font-size:0.65em" >Minimal /Full BIOS </span> </li>
+  <li><span style="font-size:0.65em" >Staged Minimal Baseline </span> </li>
   <li><span style="font-size:0.65em" >Feature ON/OFF </span> </li>
   <ul style="list-style-type:disc; line-height:0.6;">
-  <li><span style="font-size:0.6em" >SMBIOS</span> </li>
-  <li><span style="font-size:0.6em" >TPM </span> </li>
-  <li><span style="font-size:0.6em" >Secure Boot </span> </li>
+  <li><span style="font-size:0.6em" >Debug</span> </li>
+  <li><span style="font-size:0.6em" >I/O Devices  </span> </li>
+  <li><span style="font-size:0.6em" >User Interface </span> </li>
   <li><span style="font-size:0.6em" >. . . </span> </li>
   </ul>
 </ul>
 @snapend
-
 
 
 
@@ -1115,21 +1049,21 @@ In order to provide suggestions on the problem statements above, we would like t
 - Tree Structure. What does an EDKII platform package look like? 
 
 
----?image=assets/images/slides/Slide18.JPG
+---?image=assets/images/slides/Slide25.JPG
 @title[Feature – BIOS Module Selection]
-<p align="right"><span class="gold" >@size[1.1em](<b>Feature – BIOS Module Selection</b>)</span><span style="font-size:0.8em;" ><br></span></p>
-<p style="line-height:40% " align="left"><span style="font-size:0.9em;" >Minimum set of features based on Categories </span></p>
+<p align="right"><span class="gold" >@size[1.1em](<b>Feature – Selection</b>)</span><span style="font-size:0.8em;" ><br></span></p>
+<p style="line-height:40% " align="left"><span style="font-size:0.9em;" >There are three phases of feature selection  </span></p>
 
-@snap[north span-50 ]
+@snap[north span-55 ]
 <br>
 <br>
 
 <p style="line-height:20% " align="left"><span style="font-size:0.9em;" ><br></span></p>
 @box[bg-grey-15 text-white rounded my-box-pad2  ](<p style="line-height:60%"><span style="font-size:0.8em;" ><b>&nbsp;</b><br>&nbsp;</span></p>)
-<p style="line-height:20% " align="left"><span style="font-size:0.9em;" ><br><br></span></p>
+<p style="line-height:20% " align="left"><span style="font-size:0.9em;" ><br></span></p>
 @box[bg-grey-15 text-white rounded my-box-pad2  ](<p style="line-height:60%"><span style="font-size:0.8em;" ><b>&nbsp;</b><br>&nbsp;</span></p>)
-<p style="line-height:20% " align="left"><span style="font-size:0.9em;" ><br><br></span></p>
-@box[bg-grey-15 text-white rounded my-box-pad2  ](<p style="line-height:60%"><span style="font-size:0.8em;" ><b>&nbsp;</b><br>&nbsp;</span></p>)
+<p style="line-height:20% " align="left"><span style="font-size:0.9em;" ><br></span></p>
+@box[bg-grey-15 text-white rounded my-box-pad2  ](<p style="line-height:60%"><span style="font-size:0.8em;" ><b>&nbsp;</b><br><br>&nbsp;</span></p>)
 @snapend
 
 
@@ -1137,9 +1071,9 @@ In order to provide suggestions on the problem statements above, we would like t
 <br>
 <br>
 <br>
-@box[bg-lt-blue-pp text-white rounded my-box-pad2  ](<p style="line-height:70%"><span style="font-size:0.8em;" ><b>Basic Boot Components &lpar;MIN&rpar;</b><br>&nbsp;</span></p>)
-@box[bg-lt-blue-pp text-white rounded my-box-pad2  ](<p style="line-height:70%"><span style="font-size:0.8em;" ><b>Advance Boot components&lpar;Full&rpar; </b><br>&nbsp;</span></p>)
-@box[bg-lt-blue-pp text-white rounded my-box-pad2  ](<p style="line-height:70%"><span style="font-size:0.8em;" ><b>Close Source</b><br><br>&nbsp;</span></p>)
+@box[bg-lt-blue-pp text-white rounded my-box-pad2  ](<p style="line-height:70%"><span style="font-size:0.8em;" ><b>Minimum</b><br>&nbsp;</span></p>)
+@box[bg-lt-blue-pp text-white rounded my-box-pad2  ](<p style="line-height:70%"><span style="font-size:0.8em;" ><b>Advanced Feature Selection </b><br>&nbsp;</span></p>)
+@box[bg-lt-blue-pp text-white rounded my-box-pad2  ](<p style="line-height:70%"><span style="font-size:0.8em;" ><b>Optimnization</b><br><br>&nbsp;</span></p>)
 @snapend
 
 
@@ -1149,15 +1083,15 @@ In order to provide suggestions on the problem statements above, we would like t
 <br>
 
 <p style="line-height:30% " align="left"><span style="font-size:0.9em;" ><br><br></span></p>
-@css[text-white ](<p style="line-height:60%" align="left" ><span style="font-size:0.7em;" > UEFI, ACPI, PlatformInit<br><br><br><br></span></p>)
-@css[text-white ](<p style="line-height:60%" align="left" ><span style="font-size:0.7em;" > SMBIOS, S3, OPAL <br> <br><br><br> </span></p>)
-@css[text-white ](<p style="line-height:60%" align="left" ><span style="font-size:0.7em;" > TXT, AMT, CSM <br><br><br><br> </span></p>)
+@css[text-white ](<p style="line-height:60%" align="left" ><span style="font-size:0.7em;" > Manage Stage I-V options<br><br><br><br></span></p>)
+@css[text-white ](<p style="line-height:60%" align="left" ><span style="font-size:0.7em;" > Add rich feature sets &lpar;Stage VI&rpar; <br> <br><br> </span></p>)
+@css[text-white ](<p style="line-height:60%" align="left" ><span style="font-size:0.7em;" > Remove undesired features <br>&lpar;Stage VII&rpar;<br><br> </span></p>)
 
 @snapend
 
 
 @snap[south span-85 fragment]
-@box[bg-purple-pp text-white rounded my-box-pad2  ](<p style="line-height:40%"><span style="font-size:0.8em">Add / remove features using a build switch<br><br>&nbsp;</span></p>)
+@box[bg-purple-pp text-white rounded my-box-pad2  ](<p style="line-height:40%"><span style="font-size:0.8em">Select features through build, prune in binary<br><br>&nbsp;</span></p>)
 @snapend
 
 Note:
@@ -1166,26 +1100,124 @@ Note:
 - Full set (advanced boot component) – this entails all of the components needed to make a production BIOS. For example, it may support S3, SMBIOS table, OPAL. (Storage Work Group Storage Security Subsystem Class: Opal  - i.e. Tpm Opal)
 - Most  advanced modules can be open source, too, but there might be a small portion of code that can not be open source, such as the binary elements used by TXT/AMT/CSM 
 
+---?image=assets/images/slides/Slide26.JPG
+@title[Minimum Platform Feature Selection]
+<p align="right"><span class="gold" >@size[1.1em](<b>Minimum Platform Feature Selection</b>)</span><span style="font-size:0.8em;" ><br></span></p>
 
----?image=assets/images/slides/Slide25.JPG
-@title[Basic Boot Components]
-<p align="right"><span class="gold" >@size[1.1em](<b>Basic Boot Components</b>)</span><span style="font-size:0.8em;" ><br></span></p>
+@snap[north-west span-85 ]
+<br>
+<br>
+<p style="line-height:80%" align="left" ><span style="font-size:0.8em;" >
+Minium Platform
+</span></p>
+
+  <ul style="list-style-type:disc; line-height:0.7;">
+
+    <li><span style="font-size:0.75em" >Minimum feature selection should be exclusively implemented as Platform Configuration Database (PCD) </span> </li>
+    <li><span style="font-size:0.75em" >Required PCD are identified in the MPA specification </span> </li>
+    <li><span style="font-size:0.75em" >PCDs: </span> </li>
+    <ul style="list-style-type:disc; line-height:0.65;">
+      <li><span style="font-size:0.65em" >Declared with defaults in DEC files in different packages </span> </li>
+      <li><span style="font-size:0.65em" >Modified in DSC file for the board, if different than the default value </span> </li>
+    </ul>
+  </ul>
+
+<p style="line-height:80%" align="left" ><span style="font-size:0.8em;" ><br>
+Silicon  – FSP Integration from &lt;Generation&gt;FspBinPkg documentation package
+<br><br><br>&nbsp;
+</span></p>
+@snapend
+
+@snap[south span-95 fragment]
+@box[bg-purple-pp text-white rounded my-box-pad2  ](<p style="line-height:40%"><span style="font-size:0.8em">All initial porting features selection should be done this way<br><br>&nbsp;</span></p>)
+<br>
+@snapend
+
+
+Note:
+
+
+Minimum Platform 
+- Minimum feature selection should be exclusively implemented as Platform Configuration Database (PCD)
+- Required PCD are identified in the MPA specification
+- PCDs:
+  - Declared with defaults in DEC files in different packages
+  - Modified in DSC file for the board, if different than the default value
+
+Silicon  – FSP Integration from <Generation>FspBinPkg documentation package
+
+---?image=assets/images/slides/Slide27.JPG
+@title[Advanced Feature Selection]
+<p align="right"><span class="gold" >@size[1.1em](<b>Advanced Feature Selection</b>)</span><span style="font-size:0.8em;" ><br></span></p>
+<p style="line-height:80%" align="left" ><span style="font-size:0.85em;" >
+Advanced features implement DSC and FDF files that you can include in your board DSC and FDF files in the correct spots 
+</span></p>
+
+
+Note:
+
+In the DSC - include the advanced feature .DSC file in the correct spot - usually at the end of the file is okay
+
+in the FDF - include the advanced feature .fdf in the appropriate FV according to the porting stage that the feature needs to be enabled.
+
+Advanced features implement DSC and FDF files that you can include in your board DSC and FDF files in the correct spots 
+
+---?image=assets/images/slides/Slide28.JPG
+@title[Optimization Feature Selection]
+<p align="right"><span class="gold" >@size[1.1em](<b>Optimization Feature Selection</b>)</span><span style="font-size:0.8em;" ><br></span></p>
+
+@snap[north-west span-75 ]
+<br>
+<br>
+<p style="line-height:70%" align="left" ><span style="font-size:0.75em;" >
+Minimum Platform takes advantage of UEFI and EDK II features to enable feature selection to be done by post-processing the built binaries<br><br>
+@size[.8em](Essentially, after your system is functioning well, you can remove features using the FMMT tool to remove the drivers that are included as you build up the desired functionality)<br><br>
+@size[.8em](For example, if you need UEFI Shell during power-on, testing, etc.  But you don’t want it for final product.  Minimum Platform architecture makes it easy to locate and remove the shell by post-processing the image)<br>
+</span></p>
+
+<p style="line-height:80%" align="left" ><span style="font-size:0.65em;" >
+Link for <a href="https://github.com/tianocore/edk2-staging/tree/FceFmmt">FMMT Tool</a>
+</span></p>
+
+@snapend
 
 
 
 Note:
 
-Typically all the Intel Architecture platform firmware basic boot components are almost the same. In the slide, the GREEN part means the generic EDK II core modules. 
-The YELLOW part means the silicon specific modules. And finally, the PURPLE part means the platform/board specific modules 
+The canonical example is that you need UEFI Shell during power-on, testing, etc.  But you don’t want it for final product.  Minimum Platform architecture makes it easy to locate and remove the shell by post-processing the image
+
+---?image=assets/images/slides/Slide29.JPG
+@title[Full Customization Feature Selection]
+<p align="right"><span class="gold" >@size[1.1em](<b>Full Customization Feature Selection</b>)</span><span style="font-size:0.8em;" ><br></span></p>
+
+@snap[north-west span-90 ]
+<br>
+<br>
+<p style="line-height:80%" align="left" ><span style="font-size:0.85em;" >
+Feature modifications only at the Board / Platform DSC <br><br>
+Preferred modifications at Board (e.g. BoardAbc)
+
+</span></p>
+@snapend
 
 
-In the UEFI scope, we need the variable, timer, CPU, PCI, either SATA or USB as storage, Graphic or terminal as console output, and finally, USB/PS2 Keyboard or terminal as console input. The SMM portion is required for most X86 platforms in order to support UEFI Authenticated Variables [AUTH VARIABLE]. 
-Most UEFI OSes also require ACPI, so ACPI tables and an SMM driver to enable/disable ACPI are needed. 
-The platform may also need to initiliaze General Purpose Input/Ouput (GPIO) pins or a Super IO (SIO) to enable the basic boot functionality. 
+
+Note:
+
+
+We don’t talk much about it, but after you have developed advanced UEFI and EDK II understanding, you can throw away the spec and fully customize your solution using the full power of the architecture
+The main reason to mention it is that if you find yourself modifying DEC, DSC, FDF, and INF files, you shouldn’t be.
 
 
 
----?image=assets/images/slides/Slide24.JPG
+Start with Changes only in BoardAbc but if Many Changes are needed in XxxOpenBoardPkg then upstream – talk to the maintainers of the XxxOpenBoard or Port XxxOpenBoardPkg to NEWOpenBoardPkg
+
+
+
+
+
+---?image=assets/images/slides/Slide26.JPG
 @title[Features Build Enabled]
 <p align="right"><span class="gold" >@size[1.1em](<b>Features Build Enabled</b>)</span><span style="font-size:0.8em;" ><br></span></p>
 
@@ -1252,7 +1284,7 @@ Each board can have a settings file that will override the edk2-platforms/Platfo
 An example of a board specific settings:
 edk2-platforms/Platform/Intel/KabylakeOpenBoardPkg/KabylakeRvp3/build_config.cfg
 
----?image=assets/images/slides/Slide24.JPG
+---?image=assets/images/slides/Slide26.JPG
 @title[Example Build Config File]
 <p align="right"><span class="gold" >@size[1.1em](<b>Example Build Config File</b>)</span><span style="font-size:0.8em;" ><br></span></p>
 
@@ -1295,9 +1327,9 @@ SILENT_MODE = FALSE <br>&nbsp;&nbsp;
 @snapend
 
 
----?image=assets/images/slides/Slide24.JPG
-@title[Platform Features Table d’hôte ]
-<p align="right"><span class="gold" >@size[1.1em](<b>Platform Features Table d’hôte </b>)</span><span style="font-size:0.8em;" ></span></p>
+---?image=assets/images/slides/Slide26.JPG
+@title[Minimum Platform Stage Selection ]
+<p align="right"><span class="gold" >@size[1.1em](<b>Minimum Platform Stage Selection</b>)</span><span style="font-size:0.8em;" ></span></p>
 
 @snap[south-west span-100 ]
 @box[bg-black text-white rounded my-box-pad2  ](<p style="line-height:60% "><span style="font-size:0.9em;" ><br><br><br><br><br><br><br><br><br>&nbsp;</span></p>)
@@ -1377,45 +1409,156 @@ For example, PcdBootStage|4 can be used to configure a BIOS to support a boot to
    - Size and performance optimizations
 
 
----?image=assets/images/slides/Slide24.JPG
-@title[Platform Features à la carte with PCDs ]
-<p align="right"><span class="gold" >@size[1.1em](<b>Platform Features à la carte with PCDs  </b>)</span><span style="font-size:0.8em;" ></span></p>
-
-@snap[south-west span-100 ]
-@box[bg-black text-white rounded my-box-pad2  ](<p style="line-height:60% "><span style="font-size:0.9em;" ><br><br><br><br><br><br><br><br><br>&nbsp;</span></p>)
-@snapend
+---?image=assets/images/slides/Slide26.JPG
+@title[Minimum Platform Stage Selection ]
+<p align="right"><span class="gold" >@size[1.1em](<b>Minimum Platform Stage Selection</b>)</span><span style="font-size:0.8em;" ></span></p>
 
 @snap[north-west span-80 ]
 <br>
 <p style="line-height:70%" align="left" ><span style="font-size:0.8em;" ><br>
-The Platform Config <b>.<font face="Consolas">dsc</font></b> file controls if feature ON or OFF
-<br><br>
-Example:
-<br>
-@color[yellow](<b><font face="Consolas">OpenBoardPkgConfig.dsc</font></b> -  à la carte)
-</span></p>
-
-@snap[south-west span-100 ]
-<p style="line-height:40% " align="left"></span><span style="font-size:0.45em; font-family:Consolas;" ><br>&nbsp;&nbsp;
-[PcdsFeatureFlag]<br>&nbsp;&nbsp;&nbsp;&nbsp;
-  gMinPlatformPkgTokenSpaceGuid.@color[yellow](PcdStopAfterDebugInit)|FALSE <br>&nbsp;&nbsp;&nbsp;&nbsp;
-  gMinPlatformPkgTokenSpaceGuid.@color[yellow](PcdStopAfterMemInit)|FALSE <br>&nbsp;&nbsp;&nbsp;&nbsp;
-  gMinPlatformPkgTokenSpaceGuid.@color[yellow](PcdBootToShellOnly)|FALSE <br>&nbsp;&nbsp;&nbsp;&nbsp;
-  gMinPlatformPkgTokenSpaceGuid.@color[yellow](PcdUefiSecureBootEnable)|FALSE <br>&nbsp;&nbsp;&nbsp;&nbsp;
-  gMinPlatformPkgTokenSpaceGuid.@color[yellow](PcdTpm2Enable)|FALSE  <br>&nbsp;&nbsp;&nbsp;&nbsp;
-!if gMinPlatformPkgTokenSpaceGuid.PcdBootStage >= 1 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  gMinPlatformPkgTokenSpaceGuid.@color[yellow](PcdStopAfterDebugInit)|TRUE <br>&nbsp;&nbsp;&nbsp;&nbsp;
-!endif <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
- . &nbsp;&nbsp;.&nbsp;&nbsp; .
+Stage selection allows developers to bring up a system in a familiar matter:
 
 </span></p>
+
+  <ul style="list-style-type:disc; line-height:0.7;">
+    <li><span style="font-size:0.75em" >Set to Stage I.  Boot, verify serial debug capability, ready for silicon debug </span> </li>
+    <li><span style="font-size:0.75em" >Set to Stage II.  Boot, verify memory and silicon functionality </span> </li>
+    <li><span style="font-size:0.75em" >Set to Stage III.  Boot, verify board porting from shell: devices, GPIO, etc </span> </li>
+    <li><span style="font-size:0.75em" >Set to Stage IV.  Boot, verify ACPI porting, MADT, DSDT methods, etc. </span> </li>
+  </ul>
+  
+<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" ><br>
+Developers can exercise functionality gradually.<br>
+Verification at each stage
+</span></p>
+
+@snapend
+
+Note:
+- Advanced Configuration and Power Interface Specification (ACPI)
+- Multiple APIC Description Table (MADT)
+- Differentiated System Description Table (DSDT)
+
+---?image=assets/images/slides/Slide26.JPG
+@title[Required set of PCDs in MPA Spec ]
+<p align="right"><span class="gold" >@size[1.1em](<b>Required set of PCDs in MPA Spec  </b>)</span><span style="font-size:0.8em;" ></span></p>
+
+<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" ><br><br>
+Link to Required PCDs according to stages
+</span></p>
+
+
+@snap[north-west span-48 ]
 <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+@box[bg-blue-pp text-white rounded my-box-pad2  ](<p style="line-height:60% "><span style="font-size:0.9em;" ><br><br><br><br><br><br><br><br><br>&nbsp;</span></p>)
+@snapend
+
+@snap[north-east span-48 ]
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+@box[bg-blue-pp text-white rounded my-box-pad2  ](<p style="line-height:60% "><span style="font-size:0.9em;" ><br><br><br><br><br><br><br><br><br>&nbsp;</span></p>)
 @snapend
 
 
-Note:
 
-At the same time, a platform firmware may provide an “à la carte” menu so that an advanced user can configure an individual item. For example, PcdUefiSecureBootEnable can be used to configure if a BIOS needs to support UEFI secure boot [AUTH VARIABLE]. PcdTpm2Enable can be used to configure if a BIOS needs to support the TPM2 [TPM2 EDKII]. 
+@snap[north-east span-98 ]
+<br>
+<br>
+<br>
+<br>
+<br>
+<p style="line-height:65%" align="left" ><span style="font-size:0.7em;" >
+<a href="https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification/3_stage_1_minimum_debug/35_configuration.html">		
+&#8227;</a> &nbsp;&nbsp;Flash Map Config<br> 
+<a href="https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification/3_stage_1_minimum_debug/36_data_flows.html">
+&#8227;</a> &nbsp;&nbsp;Debug Config
+<a href="https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification/4_stage_2_memory_functional/45_configuration.html">		
+&#8227;</a> &nbsp;&nbsp;Intel® FSP Config<br>
+<a href="https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification/4_stage_2_memory_functional/45_configuration.html"> 
+&#8227;</a> &nbsp;&nbsp;Post Memory FV<br>
+<a href="https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification/5_stage_3_boot_to_uefi_shell/55_configuration.html"> 
+&#8227;</a> &nbsp;&nbsp;UEFI FV<br>
+<a href="https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification/5_stage_3_boot_to_uefi_shell/55_configuration.html"> 
+&#8227;</a> &nbsp;&nbsp;Driver Related
+</span></p>
+@snapend
+
+
+@snap[north-east span-46 ]
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<p style="line-height:65%" align="left" ><span style="font-size:0.7em;" >
+<a href="https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification/6_stage_4_boot_to_os/65_configuration.html"> 
+&#8227;</a> &nbsp;&nbsp;Memory Type Information<br>
+<a href="https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification/6_stage_4_boot_to_os/65_configuration.html"> 
+&#8227;</a> &nbsp;&nbsp;OS Firmware Volumes<br>
+<a href="https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification/7_stage_5_security_enable/75_configuration.html"> 
+&#8227;</a> &nbsp;&nbsp;Security Flash Map<br>
+<a href="https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification/7_stage_5_security_enable/75_configuration.html"> 
+&#8227;</a> &nbsp;&nbsp;Stage 5 Features<br>
+<a href="https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification/8_stage_6_advanced_feature_selection/83_configuration.html">
+&#8227;</a> &nbsp;&nbsp;Advanced Feature FV
+</span></p>
+@snapend
+
+
+
+Note:
+Links to all the PCDs requirements according to stages
+
+---?image=assets/images/slides/Slide26.JPG
+@title[Build Control Files ]
+<p align="right"><span class="gold" >@size[1.1em](<b>Build Control Files</b>)</span><span style="font-size:0.75em;" ></span></p>
+
+
+@snap[north-west span-100 ]
+<br>
+<br>
+<p style="line-height:85%" align="left" ><span style="font-size:0.85em;">
+Porting requires becoming familiar with the chosen reference platforms DSC and FDF files. 
+</span></p>
+@snapend
+
+@snap[north-west span-45 fragment ]
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+@box[bg-royal text-white waved my-box-pad2 ](<p style="line-height:70%" align="center"><span style="font-size:0.75em;" >@size[1.3em](DSC files)<br><br>Control what gets compiled<br> and linked<br><br>&nbsp;</span></p>)
+@snapend
+
+
+@snap[north-east span-45 fragment ]
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+@box[bg-royal text-white waved my-box-pad2  ](<p style="line-height:70%" align="center"><span style="font-size:0.75em;" >@size[1.3em](FDF files)<br><br>Control what gets put in the system FLASH image<br><br>&nbsp;</span></p>)
+@snapend
+
+Note:
+- DSC files control what gets compiled and linked
+- FDF files control what gets put in the system FLASH image
+
+
+
 
 
 ---
@@ -1427,16 +1570,14 @@ At the same time, a platform firmware may provide an “à la carte” menu so t
 <br>
 <br>
 <br>
-
 @box[bg-black text-white rounded my-box-pad2  ](<p style="line-height:60% "><span style="font-size:0.9em;" ><br><br><br><br><br><br><br><br><br><br><br>&nbsp;</span></p>)
 @snapend
 
-@snap[north-east span-48 ]
+@snap[north-east span-38 ]
 <br>
 <br>
 <br>
 <br>
-
 @box[bg-black text-white rounded my-box-pad2  ](<p style="line-height:60% "><span style="font-size:0.9em;" ><br><br><br><br><br><br><br><br><br><br><br>&nbsp;</span></p>)
 @snapend
 
@@ -1450,7 +1591,7 @@ Platform/Intel /<br>&nbsp;&nbsp;&nbsp;
  KabyLakeOpenBoardPkg /<br>&nbsp;&nbsp;&nbsp;&nbsp;
  
   KabyLakeRvp3 /<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-     OpenBoardPkg@color[yellow](Config).dsc <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+     OpenBoardPkgConfig.dsc <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
      OpenBoardPkgPcd.dsc  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
      OpenBoardPkgBuildOption.dsc<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -1464,33 +1605,53 @@ Platform/Intel /<br>&nbsp;&nbsp;&nbsp;
 @snapend
 
 
-@snap[north-east span-47 ]
+@snap[north-east span-36 ]
 <br>
-<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" ><br>
-MinnowBoard Turbot
+<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" ><br><br>
 </span></p>
 
 <p style="line-height:40% " align="left"><span style="font-size:0.45em; font-family:Consolas;" ><br>&nbsp;&nbsp;
-Platform/Intel /<br>&nbsp;&nbsp;&nbsp;&nbsp;
+edk2-platforms/Platform/ <br>&nbsp;&nbsp;&nbsp;&nbsp;
+  Intel/@color[yellow](MinPlatformPkg)/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Include/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      @color[cyan](Fdf)/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      @color[cyan](Dsc)/<br>&nbsp;&nbsp;
+<br>&nbsp;&nbsp;
+edk2-platforms/@color[yellow](Features)/ <br>&nbsp;&nbsp;&nbsp;&nbsp;
+  Intel/@color[yellow](YyyAdvancedPkg)/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Include/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      @color[cyan](Fdf)/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      @color[cyan](Dsc)/<br>&nbsp;&nbsp;
+</span></p>
+@snapend
 
-  Vlv2TbltDevicePkg /<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-     PlatformPkg.dec<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-     PlatformPkg@color[yellow](Config).dsc<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+@snap[north-east  span-70 fragment ]
+<br>
+<p style="line-height:05%" align="left" ><span style="font-size:0.8em;" ><br>
+</span></p>
+<p style="line-height:38% " align="left"></span><span style="font-size:0.45em; font-family:Consolas;" ><br>
+<br>
+<br>
+ 
+<br>
+<br><br><br><br><br>
 
-     PlatformPkgIa32.dsc<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-     PlatformPkgX64.dsc<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-     PlatformPkgGcc.dsc<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       @color[#A8ff60](&larr;)@color[#FFC000](<b>&nbsp;&nbsp;Modify PCD Here  </b>)<br>
+       <br>
+       @color[#A8ff60](&larr;)@color[#FFC000](<b>&nbsp;&nbsp;Add Features Here  </b>)<br><br>
 
-     PlatformPkg.fdf <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-     PlatformPkgGcc.fdf
+       <br>
+       @color[#A8ff60](&larr;)@color[#FFC000](<b>&nbsp;&nbsp;Add Features Here  </b> )
 
 </span></p>
 
 @snapend
 
+
+
 @snap[south span-95 fragment]
-@box[bg-purple-pp text-white rounded my-box-pad2  ](<p style="line-height:40%"><span style="font-size:0.8em">..Config.dsc File Controls if feature ON or OFF <br><br>&nbsp;</span></p>)
+@box[bg-purple-pp text-white rounded my-box-pad2  ](<p style="line-height:40%"><span style="font-size:0.8em">OpenBoardPkg.dsc File Controls if feature ON or OFF <br><br>&nbsp;</span></p>)
 @snapend
 
 
@@ -1638,16 +1799,17 @@ Note:
 Click on the link to view the whole .FDF file
 
 
----?image=assets/images/slides/Slide33.JPG
+---?image=assets/images/slides/Slide39.JPG
 @title[Focus - Configuration Section]
 <br>
 <p align="left"><span class="gold" >@size[1.1em](<b>Configuration </b>)</span></span></p>
 
+
 @snap[south-west span-30 ]
 <br>
 <ul style="list-style-type:disc; line-height:0.7;">
-  <li><span style="font-size:0.65em" >Setup Variable</span> </li>
-  <li><span style="font-size:0.65em" >PCD </span> </li>
+  <li><span style="font-size:0.65em" >Staged</span> </li>
+  <li><span style="font-size:0.65em" >Defined PCD </span> </li>
   <li><span style="font-size:0.65em" >Policy Hob/PPI/Protocol </span> </li>
 </ul>
 <br>
@@ -1718,21 +1880,52 @@ Note:
 - MACRO – C-language MACRO. It is fixed at build time.
 
 
-+++
-<!-- .slide: data-background-transition="none" -->
-<!-- .slide: data-transition="none" -->
-@title[Configuration Options 02 ]
-<p align="right"><span class="gold" >@size[1.1em](<b>Configuration Options - details</b>)</span><span style="font-size:0.8em;" ></span></p>
-<br>
-<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" >
 
-@color[yellow](PI PCD) – The PI PCD could be static data fixed at build time or dynamic data updatable at runtime.<br><br>
-@color[yellow](UEFI Variable) – The UEFI Variable can be non-volatile data or volatile data, and it is widely used by VFR.<br><br>
-@color[yellow](FSP UPD) – FSP UPD can be static default configuration, or a dynamic updatable UPD.<br><br>
-@color[yellow](Silicon Policy Hob/PPI/Protocol) – It is policy data constructed at runtime or it can be a hook for silicon code.<br>
-</span></p>
+---
+@title[MPA Configuration Options]
+<p align="right"><span class="gold" >@size[1.1em](<b>MPA Configuration Options</b>)</span><span style="font-size:0.8em;" ><br></span></p>
+<p style="line-height:40% " align="left"><span style="font-size:0.9em;" >Platform configuration data for Minimum Platform </span></p>
+
+@snap[north-east span-75 ]
+<br>
+<br>
+<br>
+<p style="line-height:20% " align="left"><span style="font-size:0.9em;" ><br></span></p>
+@box[bg-grey-15 text-white rounded my-box-pad2  ](<p style="line-height:60%"><span style="font-size:0.8em;" ><b>&nbsp;</b><br>&nbsp;</span></p>)
+<p style="line-height:20% " align="left"><span style="font-size:0.9em;" ><br></span></p>
+@box[bg-grey-15 text-white rounded my-box-pad2  ](<p style="line-height:60%"><span style="font-size:0.8em;" ><b>&nbsp;</b><br><br>&nbsp;</span></p>)
+<p style="line-height:20% " align="left"><span style="font-size:0.9em;" ><br></span></p>
+@box[bg-grey-15 text-white rounded my-box-pad2  ](<p style="line-height:60%"><span style="font-size:0.8em;" ><b>&nbsp;</b><br><br>&nbsp;</span></p>)
+@snapend
+
+
+@snap[north-west span-35 ]
+<br>
+<br>
+<br>
+<br>
+@box[bg-royal text-white rounded my-box-pad2  ](<p style="line-height:70%"><span style="font-size:0.8em;" ><b>PI PCD</b><br><br>&nbsp;</span></p>)
+@box[bg-royal text-white rounded my-box-pad2  ](<p style="line-height:70%"><span style="font-size:0.8em;" ><b>FSP UPD, Silicon Policy, Hob</b><br>&nbsp;</span></p>)
+@box[bg-royal text-white rounded my-box-pad2  ](<p style="line-height:70%"><span style="font-size:0.8em;" ><b>Global NVS</b><br><br>&nbsp;</span></p>)
+@snapend
+
+
+
+@snap[north-east span-62 ]
+<br>
+<br>
+<br>
+<p style="line-height:30% " align="left"><span style="font-size:0.9em;" ><br></span></p>
+@css[text-white ](<p style="line-height:60%" align="left" ><span style="font-size:0.7em;" > The PI PCD could be static data fixed at build time or dynamic data updatable at runtime.<br><br></span></p>)
+@css[text-white ](<p style="line-height:60%" align="left" ><span style="font-size:0.7em;" > FSP UPD can be static default configuration, or a dynamic updatable UPD. It is policy data constructed at runtime or it can be a hook for silicon code <br> <br><br> </span></p>)
+@css[text-white ](<p style="line-height:60%" align="left" ><span style="font-size:0.7em;" > ACPI region, passes configuration from C code to ASL code.<br><br> </span></p>)
+
+@snapend
 
 Note:
+
+PI PCD – The PI PCD could be static data fixed at build time or dynamic data updatable at runtime.
+
 
 ##### PI PCD – The PI PCD could be static data fixed at build time or dynamic data updatable at runtime. 
 - PcdsFeatureFlag: This type PCD only supports 1/0. Caller uses FeaturePcdGet() to retrieve the value. This type of PCD is mapped to be a MACRO so that a compiler optimization can remove the code scoped by “if(FALSE)”. It is not allowed to set as a PcdsFeatureFlag. 
@@ -1741,59 +1934,16 @@ Note:
 - PcdsDynamicDefault: PcdsDynamicDefault is mapped to a PPI or protocol. It is allowed for both PcdGet and PcdSet. PcdSet changes the system-level PCD value immediately. This type of PCD value is volatile. The changed value will not be saved in the next boot. 
 - PcdsDynamicHii: PcdsDynamicHii is mapped to a UEFI variable. It is non-volatile. As such, the changed value can be saved in the next boot. However, the tricky thing is that this PCD value depends on the UEFI variable services 
 
-readiness. If PcdGet is called before UEFI variable services ready, the default PCD value will be returned instead of the updated PCD value. We suggest that the platform owner be very very careful of this trap. If DXE PcdGet is required before the UEFI variable services are ready, we suggest that the platform define PcdsDynamicDefault, and then use get variable data in the PEI phase to fill in this PCD value. 
-- PcdsDynamicVpd: PcdsDynamicVpd is to map configuration data to a static flash region so that a tool can modify the PcdsDynamicVpd after the flash image is generated. This is used by a BIOS that needs to support binary configuration after build. Intel FSP is an example of using PcdsDynamicVpd. 
-- PcdsDynamicEx: PcdsDynamicEx is to support external module for binary build. If an EFI module (DXE Driver or PEIM) is not built with the system firmware, the dynamic PCD must be declared as PcdsDynamicEx. If a platform wants to include this binary EFI module, the binary module INF must be included in DSC file. As such, the PCD database will include the external PCD declared in this binary module. 
-- SkuIds: SkuIds is a special usage of PCD. The use case of Multi-SKU PCD is to build one UEFI firmware boots on multiple board with different configuration in each board. It can support multiple board configurations generated at build time and support runtime selection to make one configuration take effect finally. The good point is that it is very straightforward for each board, if board configuration can be determined. 
-- DefaultStores: DefaultStores is a special usage of PCD (gEfiMdeModulePkgTokenSpaceGuid.PcdSetNvStoreDefaultId). The use case of DefaultStores is to create different default stores in different boot mode, such as standard boot, manufacturing boot mode, or safe boot mode. The configuration data is set to (gEfiMdeModulePkgTokenSpaceGuid.PcdNvStoreDefaultValueBuffer). All those default stores are configured at build time and selected at runtime according to the boot mode. The default store PCD can be consumed by the HiiDatabase to support BIOS setup “load default” operation. 
 
-
-##### UEFI Variable – The UEFI Variable can be non-volatile data or volatile data, and it is widely used by VFR. 
-- In most cases, a non-volatile variable is used to store the user updatable configuration in a setup page. One example is VT enable/disable. This is purely a platform choice. We suggest that the platform map variable configuration to PCD, and use a PcdSet callback to set the variable data. The benefit is that if a new platform just wants to use a static setting, it can remove the variable easily. 
-- A non-volatile variable may also be used to store the system configuration generated at runtime, for example, memory configuration data. In order to maintain security, we suggest that platform to lock the configuration variable before exiting PM auth/EndOfDxe event, by using the EDKII_VARIABLE_LOCK protocol. 
-- A volatile variable is generated at runtime. A platform setup driver may use this information to control a VFR page to suppress or gray out a menu, or to display the system information, like CPU/SA/PCH stepping and features. 
-
+FSP UPD – FSP UPD can be static default configuration, or a dynamic updatable UPD.
 ##### FSP UPD – FSP UPD can be static default configuration, or a dynamic updatable UPD. 
 - FSP UPD is used to pass configuration from the FSP wrapper into a FSP binary. A platform needs to convert the policy configuration in PCD to a FSP UPD before calling a FSP API, like FspMemoryInit, FspSiliconInit. 
 - PcdsDynamicVpd.Upd: For a FSP binary, we use DynamicVpd.Upd to mark the configuration that needs to be in the UPD region. (Please be aware that UPD is not a standard PCD concept, it is an FSP extension) 
 
-##### Silicon Policy Hob/PPI/Protocol – It is policy data constructed at runtime or it can be a hook for silicon code. 
+#### Silicon Policy Hob/PPI/Protocol – It is policy data constructed at runtime or it can be a hook for silicon code
+
 - Policy data: Silicon Policy Hob/PPI/Protocol are useful in order to let one silicon code module support multiple boards. It is the interface between silicon code and platform code. A platform needs to convert policy configuration in PCD into a Silicon Policy PPI/Protocol. 
 - Silicon Hook: Sometimes, we observe that Silicon Policy PPI or Protocol provides a silicon hook for platform. This hook may perform some additional action based on a platform setting, or retrieve some system information. In most cases, we suggest to separate the hook function from policy data. 
-
-+++
-<!-- .slide: data-background-transition="none" -->
-<!-- .slide: data-transition="none" -->
-@title[Configuration Options 03 ]
-<p align="right"><span class="gold" >@size[1.1em](<b>Configuration Options - details Cont.</b>)</span><span style="font-size:0.8em;" ></span></p>
-<br>
-<p style="line-height:70%" align="left" ><span style="font-size:0.8em;" >
-@color[yellow](Configuration Block) – data structure,  puts all policy data in a block without any C-language data pointer in policy data. <br><br>
-@color[yellow](Global NVS) – ACPI region,  passes configuration from C code to ASL code. <br><br>
-@color[yellow](Platform signed data blob) – read only, data signed at build time.<br><br>
-@color[yellow](CMOS) – simple non-volatile storage, but it is not secure. <br><br>
-@color[yellow](MACRO) – C-language MACRO, fixed at build time.<br>
-</span></p>
-
-Note:
-
-##### Configuration Block – It is a data structure to put all policy data in a block without any C-language data pointer in a policy data. 
-- The Configuration Block is a new idea to resolve data pointer issues objserved in earlier HOB usage. Previously, a silicon code module would define a root policy data object with some data pointers to sub-regions. For example, a PCH policy data may include a pointer to USB policy data, a pointer to SATA policy data, and a pointer to PCIExpress policy data. This HOB policy data pointer needs to be relocated after memory initialization, such as the Memory Reference Code (MRC), is done, because the PEI core needs to move data from temporary memory or Cache-As-RAM (CAR) to DRAM. If the platform code forgets to move the policy data and fix the pointer, the following code might retrieve the wrong policy data pointer. With the configuration block, the silicon and platform needn’t worry about the invalid policy data pointer issue because the data pointer is eliminated. The PCH policy data block may include a USB policy data block, a SATA policy data and a PCIExpress policy data. Configuration Blocks can be mapped and used by either Hob/PPI/Protocol or PCD. 
-##### Global NVS – It is an ACPI region to pass the configuration from the C code to ASL code. 
-- Global NVS can be used for turning some feature on/off. An example includes returning different _STA values. 0x0 means the device does not exist. 0xF means the device exists. 
-
-It can be used as the policy data, for example CriticalTemperature value. A platform C code module may convert the configuration from PCD to Global NVS. 
-- Since the name has “global”, we observe that may platform put all different features into one big data structure. It is discouraged. We recommend each separate feature can have its own NVS data structure. It is easy for feature on/off control. 
-
-##### Platform signed data blob – It is read only signed data at build time. 
-
-This signed data blob provides the configuration on a platform. An OEM may update the configuration for different boards. We suggest the platform map the signed data blob to PCDs so that a platform consumer can just use PcdGet to get the configuration without knowing the data source. The benefit is that all the platform code can be consistent, irrespective of whether the configuration data is from a signed data blob, a BIOS boot block static region, or a UEFI variable. 
-##### CMOS – It is simple non-volatile storage, but it is not secure. 
-- The most useful usage of CMOS is to use CMOS-CLEAR to determine if an end user wants to use the default variable configuration. This is a consistent user experience from old legacy BIOS. The new platform can use a special function key or a special GPIO as indicator of this logic. 
-- The benefit of CMOS is that the CMOS can be accessed at early SEC phase without rich API requirements. Beyond that usage, though, we do not suggest a platform use CMOS to store configuration data. 
-##### MACRO – C-language MACRO. It is fixed at build time. 
-- A MACRO can be used as static data configuration. It is useful if the MACRO is only used in one module and does not require user configuration. However, if the MACRO is used across many modules or is configurable, like PCIE_BASE, we suggest using PCD. 
-- A MACRO used in #IFDEF can be used to enable/disable features. If the consumer is in C code, it can be replaced by FeaturePcd. It will become if(0) or if(1) finally. The benefit of using PCD is that all the code in both path can be built. 
 
 
 ---
@@ -1868,7 +2018,7 @@ BKM is using PCDs only in platform code, no matter where a platform chooses to s
 
 Then the code is consistent and easy to maintain, especially if the next generation platform decides to change the location. 
 
----?image=/assets/images/slides/Slide38.JPG
+---?image=/assets/images/slides/Slide43.JPG
 @title[PCD Syntax review]
 <p align="right"><span class="gold" ><b>PCD Syntax Review</b></span></p>
 @snap[north-east span-90 fragment]
@@ -1939,7 +2089,7 @@ BKM is to set the desired value in the Platform Specific .DSC file
 
 
  
----?image=/assets/images/slides/Slide39.JPG
+---?image=/assets/images/slides/Slide44.JPG
 @title[How to Map PCD ]
 <p align="right"><span class="gold" >@size[1.1em](<b>How to Map PCD to Configuration Data</b>)</span><span style="font-size:0.8em;" ></span></p>
 <p style="line-height:70%" align="left" ><span style="font-size:0.8em;" >
@@ -2324,7 +2474,7 @@ A board module may refer to another source to get the board specific policy data
 - Binary Blob 
 - Built-in C structure. 
 
----?image=assets/images/slides/Slide45.JPG
+---?image=assets/images/slides/Slide50.JPG
 @title[Example: FSP policy in MinPlatformPkg]
 <p align="right"><span class="gold" >@size[1.1em](<b>Example: FSP policy in MinPlatformPkg</b>)</span></span></p>
 
@@ -2480,7 +2630,7 @@ PcdSet16S (@color[yellow](PcdSetNvStoreDefaultId), 0x0); <br>&nbsp;
 
 Note:
 
----?image=assets/images/slides/Slide48.JPG
+---?image=assets/images/slides/Slide53.JPG
 @title[Board Porting ]
 <br>
 <p align="left"><span class="gold" >@size[1.1em](<b>Board Porting</b>)</span><span style="font-size:0.8em;" ></span></p>
@@ -2488,6 +2638,7 @@ Note:
 @snap[south-east span-33 ]
 <br>
 <ul style="list-style-type:disc; line-height:0.7;">
+  <li><span style="font-size:0.65em" >Staged </span> </li>
   <li><span style="font-size:0.65em" >GPIO </span> </li>
   <li><span style="font-size:0.65em" >SIO </span> </li>
   <li><span style="font-size:0.65em" >ACPI </span> </li>
@@ -2613,101 +2764,7 @@ INF  MdeModulePkg/Universal/Variable/RuntimeDxe/VariableSmm.inf
 </pre>
 
 
----?image=assets/images/slides/Slide50.JPG
-<!-- .slide: data-transition="none" -->
-@title[Stages vs. Boot Flow]
-<p align="right"><span class="gold" >@size[1.1em](<b>Stages vs. Boot Flow</b>)</span><span style="font-size:0.75em;" ></span></p>
-
-Note:
-
-1. enable debug
-2. memory initialization
-3. boot to UEFI shell only
-4. boot to OS
-5. boot to OS w/ security enabled
-6. Advanced Feature Selection
-7. Not shown  Performance Optimizations
-
-
-
-+++?image=assets/images/slides/Slide51.JPG
-<!-- .slide: data-background-transition="none" -->
-<!-- .slide: data-transition="none" -->
-@title[Stages vs. Boot Flow 02]
-<p align="right"><span class="gold" >@size[1.1em](<b>Stages vs. Boot Flow</b>)</span><span style="font-size:0.75em;" ></span></p>
-
-Note:
-1. enable debug
-2. memory initialization
-3. boot to UEFI shell only
-4. boot to OS
-5. boot to OS w/ security enabled
-6. Advanced Feature Selection
-7. Not shown  Performance Optimizations
-
-
-+++?image=assets/images/slides/Slide52.JPG
-<!-- .slide: data-background-transition="none" -->
-<!-- .slide: data-transition="none" -->
-@title[Stages vs. Boot Flow 03]
-<p align="right"><span class="gold" >@size[1.1em](<b>Stages vs. Boot Flow</b>)</span><span style="font-size:0.75em;" ></span></p>
-
-Note:
-1. enable debug
-2. memory initialization
-3. boot to UEFI shell only
-4. boot to OS
-5. boot to OS w/ security enabled
-6. Advanced Feature Selection
-7. Not shown  Performance Optimizations
-
-
-+++?image=assets/images/slides/Slide53.JPG
-<!-- .slide: data-background-transition="none" -->
-<!-- .slide: data-transition="none" -->
-@title[Stages vs. Boot Flow 04]
-<p align="right"><span class="gold" >@size[1.1em](<b>Stages vs. Boot Flow</b>)</span><span style="font-size:0.75em;" ></span></p>
-
-Note:
-1. enable debug
-2. memory initialization
-3. boot to UEFI shell only
-4. boot to OS
-5. boot to OS w/ security enabled
-6. Advanced Feature Selection
-7. Not shown  Performance Optimizations
-
-+++?image=assets/images/slides/Slide54.JPG
-<!-- .slide: data-background-transition="none" -->
-<!-- .slide: data-transition="none" -->
-@title[Stages vs. Boot Flow 05]
-<p align="right"><span class="gold" >@size[1.1em](<b>Stages vs. Boot Flow</b>)</span><span style="font-size:0.75em;" ></span></p>
-
-Note:
-1. enable debug
-2. memory initialization
-3. boot to UEFI shell only
-4. boot to OS
-5. boot to OS w/ security enabled
-6. Advanced Feature Selection
-7. Not shown  Performance Optimizations
-
-+++?image=assets/images/slides/Slide55.JPG
-<!-- .slide: data-background-transition="none" -->
-<!-- .slide: data-transition="none" -->
-@title[Stages vs. Boot Flow 06]
-<p align="right"><span class="gold" >@size[1.1em](<b>Stages vs. Boot Flow</b>)</span><span style="font-size:0.75em;" ></span></p>
-
-Note:
-1. enable debug
-2. memory initialization
-3. boot to UEFI shell only
-4. boot to OS
-5. boot to OS w/ security enabled
-6. Advanced Feature Selection
-7. Not shown  Performance Optimizations
-
----?image=assets/images/slides/Slide56.JPG
+---?image=assets/images/slides/Slide55.JPG
 @title[MinPlatform + Intel® FSP Boot Flow]
 <p align="right"><span class="gold" >@size[1.1em](<b>MinPlatform @color[yellow](+) Intel® FSP Boot Flow</b>)<br></span><span style="font-size:0.75em;" >- Staged Approach</span></p>
 
@@ -2738,6 +2795,13 @@ Example of adding Network Stack
 
 
 
+---?image=assets/images/slides/Slide56.JPG
+@title[Stages Organize the MPA Specification]
+<p align="right"><span class="gold" >@size[1.1em](<b>Stages Organize the MPA Specification</b>)<br></span><span style="font-size:0.75em;" ></span></p>
+
+Note:
+
+Follow the flow chart with examples
 
 ---?image=assets/images/slides/Slide57.JPG
 @title[Staged Approach by Features]
@@ -3349,22 +3413,316 @@ Note:
 
 The PlatformInit folder (Intel/MinPlatformPkg/PlatformInit) - PlatformInitPei, PlatformInitDxe and PlatformInitSmm control the platform initialization flow. Because this flow needs to involve the board initialization,  there is a set of  board hook points defined in BoardInitLib (MinPlatformPkg/Include/Library/BoardInitLib.h) 
 
----?image=assets/images/slides/Slide8.JPG
-@title[EDK II Open Platform Summary Section]
+
+
+---?image=assets/images/slides/Slide69.JPG
+@title[How to find the Platform Hooks: Process of Porting ]
+<p align="right"><span class="gold" >@size[1.1em](<b>How to find the Platform Hooks: Process of Porting </b>)</span><span style="font-size:0.75em;" ></span></p>
+
+
+@snap[south span-85 fragment]
+@box[bg-purple-pp text-white rounded my-box-pad2  ](<p style="line-height:40%"><span style="font-size:0.8em">Check the Board/Platform .FDF file layout<br><br>&nbsp;</span></p>)
+@snapend
+
+Note:
+
+Where’s the platform code start? or the first point where the platform code is executed?
+
+As the foundational stage for further functionality, Stage I may include additional content beyond what is strictly required to meet the stage objective. Typically this will include silicon initialization code that may be packaged in a variety of mechanisms including varying size binary blobs. 
+
+The Stage I modules will be combined into FVs to make up the Stage I components
+
+
+
+---?image=assets/images/slides/Slide70.JPG
+@title[Investigate the FDF then DSC files]
+<p align="right"><span class="gold" >@size[1.1em](<b> Investigate the FDF  then DSC Files</b>)</span><span style="font-size:0.75em;" ></span></p>
+
+@snap[north-west span-66 ]
 <br>
-<p align="left"><span class="gold" >@size[1.1em](<b>EDK II Open Platform <br>Summary</b>)</span></span></p>
+<br>
+<p style="line-height:80%" align="left" ><span style="font-size:0.85em; ">
+<b>Porting process per stage: find and update platform hooks</b>
+</span></p>
+
+<ul style="list-style-type:none; line-height:0.8;">
+  <li class="fragment"><span style="font-size:0.7em" >@color[yellow](&#10102;)&nbsp;Locate FVs for each stage</span> </li>
+  <li class="fragment"><span style="font-size:0.7em" >@color[yellow](&#10103;)&nbsp;Modules for each FV contents</span> </li>
+  <li class="fragment"><span style="font-size:0.7em" >@color[yellow](&#10104;)&nbsp;Module Locations</span> </li>
+  <li class="fragment"><span style="font-size:0.7em" >@color[yellow](&#10105;)&nbsp;Platform Porting Libraries per Module</span> </li>
+  <li class="fragment"><span style="font-size:0.7em" >@color[yellow](&#10106;)&nbsp;Update the Hook Function for Board</span> </li>
+</ul>
+
+@snapend
+
+@snap[south span-90 fragment]
+@box[bg-purple-pp text-white rounded my-box-pad2  ](<p style="line-height:40%"><span style="font-size:0.8em">Also check the reference platform BUILD directory <br>&nbsp;</span></p>)
+@snapend
+
+Note:
+The process for porting each stage will be to investigate the FDF and the DSC files to locate FVs, Modules and Libraries associated with each stage.
+Once the library hook is found, update that platform hook function for the board being ported.
+
+### Porting Process per Stage Find: 
+1. Locate FVs for each stage in the FDF file
+2. find Modules for each FV contents in the FDF
+3. Find Module Locations in the platform DSC file - Should point to an inf file that is probably in the Common i.e. MinplatformPkg or edk2 modules
+4. Find Platform Porting Libraries per Module in th DSC - library could be in minPlatform with hook into the platform specific code.
+5. Update the Hook Function for Board,  should be in a .c file coorsponding to the library
+
+
+---?image=assets/images/slides/Slide71.JPG
+@title[How to search for Libraries in the Workspace]
+<p align="right"><span class="gold" >@size[1.1em](<b>How to search for Libraries in the Workspace</b>)</span><span style="font-size:0.75em;" ></span></p>
+
+
+@snap[north-west span-67 ]
+<br>
+<br>
+<br>
+<ul style="list-style-type:none; line-height:0.7;">
+  <li><span style="font-size:0.7em" >1. Search the workspace .DSC files for the <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string of the library<br></span> </li><br>
+  <li><span style="font-size:0.7em" >2. Open the .DSC files associated with the <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open board platform project<br></span> </li><br>
+  <li><span style="font-size:0.7em" >3. Determine which Library is used and that <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;should have the build path in the workspace<br></span> </li><br>
+  <li><span style="font-size:0.7em" >4. DSC file will have similar to:</span> </li>
+  <li><span style="font-size:0.5em; font-family:Consolas;" >&nbsp;&nbsp;&nbsp;&nbsp;@color[yellow](SomeLib)|Path_to_the_Library_used.inf<br></span> </li><br>
+  <li><span style="font-size:0.7em" >5. Verify the instance used from the <font face="Consolas">Build</font><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; directory:</span> </li>
+</ul>
+
+@snapend
+
+
+
+Note:
+http://sustituciondepuestosclaves.wikispaces.com/Metodo+de+Sustitucion+de+Puestos+Claves 
+
+Another Note: use Regular expressions to find multiple strings:
+Example, to fine the strings “Hob” and “Serial”
+
+    Serial.*Hob|Hob.*Serial  
+
+reg exp to find string1 "Serial" string2 "Hob"
+
+
+
+---?image=assets/images/slides/Slide72.JPG
+@title[Platform Initialization Board Hook Modules - Stage 1 ]
+<p align="right"><span class="gold" >@size[1.1em](<b>Platform Initialization Board Hook Modules <br>- Stage 1</b>)</span><span style="font-size:0.75em;" ></span></p>
+
+
+@snap[north-west span-49 ]
+<br>
+<br>
+<br>
+@box[bg-black text-white rounded my-box-pad2  ](<p style="line-height:60% "><span style="font-size:0.9em;" ><br><br><br><br><br><br><br><br><br><br><br><br>&nbsp;</span></p>)
+@snapend
+
+@snap[north-east span-49 ]
+<br>
+<br>
+<br>
+@box[bg-black text-white rounded my-box-pad2  ](<p style="line-height:60% "><span style="font-size:0.9em;" ><br><br><br><br><br><br><br><br><br><br><br><br>&nbsp;</span></p>)
+@snapend
+
+
+@snap[north-east span-98 ]
+<br>
+<br>
+<br>
+<p style="line-height:50%" align="left" ><span style="font-size:0.5em; font-family:Consolas;"><br>
+MinPlatformPkg/<br>&nbsp;&nbsp;
+  Include/<br>&nbsp;&nbsp;&nbsp;&nbsp;
+     Library/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	   @color[yellow](BoardnitLib.h)<br>&nbsp;&nbsp;
+  Library/<br>&nbsp;&nbsp;
+  . . .<br>&nbsp;&nbsp;
+  @color[cyan](PlatformInit/)<br>&nbsp;&nbsp;&nbsp;&nbsp;
+    PlatformInitPei/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	  PlatformInitPreMem/<br>&nbsp;&nbsp;
+<br>&nbsp;&nbsp;
+</span></p>
+@snapend
+
+@snap[north-east span-46 ]
+<br>
+<br>
+<br>
+<p style="line-height:50%" align="left" ><span style="font-size:0.5em; font-family:Consolas;"><br>
+BoardDetect&lpar;&rpar;<br>
+BoardDebugInit&lpar;&rpar;<br>
+BoardBootModeDetect&lpar;&rpar;<br>
+BoardInitBeforeMemoryInit&lpar;&rpar;<br>
+<br>&nbsp;&nbsp;
+</span></p>
+@snapend
+
+
+
+
+@snap[north-east span-72 fragment]
+<br>
+<br>
+<br>
+<p style="line-height:50%" align="left" ><span style="font-size:0.5em; font-family:Consolas;"><br>
+<br>
+<br>
+<br>
+<font face="Arial">@size[1.7](@color[#A8ff60]( <b>&larr;</b>)) &nbsp;&nbsp;// hooks</font><br>&nbsp;&nbsp;
+</span></p>
+@snapend
+
+@snap[north-east span-46 ]
+<br>
+<br>
+<br>
+<p style="line-height:50%" align="left" ><span style="font-size:0.5em; font-family:Consolas;"><br>
+BoardDetect&lpar;&rpar;<br>
+BoardDebugInit&lpar;&rpar;<br>
+BoardBootModeDetect&lpar;&rpar;<br>
+BoardInitBeforeMemoryInit&lpar;&rpar;<br>
+<br>&nbsp;&nbsp;
+</span></p>
+@snapend
+
+
+
+
+
+
+@snap[south span-95 fragment]
+@box[bg-purple-pp text-white rounded my-box-pad2  ](<p style="line-height:70%"><span style="font-size:0.8em">PlatformInit folder <font face="Consolas">@size[.8em](PlatformInit)</font> controls<br> the platform initialization flow<br>&nbsp;</span></p>)
+@snapend
+
+
+
+
+Note:
+
+The PlatformInit folder (Intel/MinPlatformPkg/PlatformInit) - PlatformInitPei, PlatformInitDxe and PlatformInitSmm control the platform initialization flow. 
+
+Because this flow needs to involve the board initialization,  there is a set of  board hook points defined in BoardInitLib (MinPlatformPkg/Include/Library/BoardInitLib.h) 
+
+
+---?image=assets/images/slides/Slide72.JPG
+@title[Hook - Board Detection ]
+<p align="right"><span class="gold" >@size[1.1em](<b>Hook - Board Detection </b>)</span><span style="font-size:0.75em;" ><br> - Kabylake example</span></p>
+
+
+@snap[north-west span-49 ]
+<br>
+<br>
+@box[bg-black text-white rounded my-box-pad2  ](<p style="line-height:60% "><span style="font-size:0.9em;" ><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>&nbsp;</span></p>)
+@snapend
+
+
+@snap[north-east span-97 ]
+<br>
+<br>
+<p style="line-height:50%" align="left" ><span style="font-size:0.5em; font-family:Consolas;"><br>
+MinPlatformPkg/<br>&nbsp;&nbsp;
+ . . .<br>&nbsp;&nbsp;
+  PlatformInit/<br>&nbsp;&nbsp;&nbsp;&nbsp;
+    PlatformInitPei -&gt;  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+         PlatformInitPreMem.c<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 @color[cyan](BoardDetect&lpar;&rpar;)<br>
+KabylakeOpenBoardPkg/<br>&nbsp;&nbsp;
+ . . .<br>&nbsp;&nbsp;
+  KabylakeRvp3/<br>&nbsp;&nbsp;&nbsp;&nbsp;
+    Library/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      BoardInitLib -&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        PeiBoardInitPreMemLib.c<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 @color[cyan](BoardDetect&lpar;&rpar;)  <br>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+        PeiKabylakeRvp3Detect.c<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 @color[yellow](KabylakeRvp3BoardDetect&lpar;&rpar;)
+
+<br>&nbsp;&nbsp;
+</span></p>
+@snapend
+
+@snap[north-east span-47 ]
+<br>
+<br>
+<br>
+<p style="line-height:65%" align="left" ><span style="font-size:0.7em; ">
+Uses PCD Library calls to set / get Board SKU for Storing Board ID<br>
+   <font face="Consolas">@size[.8em](LibPcdGetSku&lpar;&rpar; & LibPcdSetSku&lpar;&rpar;)</font><br><br>
+
+<font face="Consolas">@size[.8em](KabylakeRvp3BoardDetect&lpar;&rpar;)</font> function reads Board ID from embedded controller (EC) using the LPC bus  <br><br>
+@size[.8em](<font face="Consolas">LibPcdSetSku&lpar;&rpar;</font> stores Board ID)<br>
+@size[.8em](<font face="Consolas">LibPcdGetSku&lpar;&rpar;</font> used from that point on)
+
+<br>&nbsp;&nbsp;
+</span></p>
+@snapend
+
+
+@snap[north-east span-99 fragment]
+<br>
+<br>
+<p style="line-height:50%" align="left" ><span style="font-size:0.5em; font-family:Consolas;"><br>
+<br>&nbsp;&nbsp;
+<br>&nbsp;&nbsp;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+@color[#A8ff60](&larr;----------)<br>
+@color[#A8ff60](&vert;)<br>
+@color[#A8ff60](&vert;)<br>
+@color[#A8ff60](&vert;)<br>
+@color[#A8ff60](&vert;)<br>
+@color[#A8ff60](&vert;)<br>
+@color[#A8ff60](&vert;)<br>
+@color[#A8ff60](-----------&rarr;)<br>
+@color[#A8ff60](&vert;) <br>
+@color[#A8ff60](-----------&rarr;)
+
+<br>&nbsp;&nbsp;
+</span></p>
+@snapend
+
+
+Note:
+
+
+
+- In order to determine which board specific driver needs to run and which does not need to run, there must be some code to detect the board type. 
+- The board detection code is board specific. It should be under the board specific directory 
+
+- Uses PCD calls to set / get Board Sku for Storing Board ID
+	LibPcdGetSku() & LibPcdSetSku()
+
+- For the Kabylake example the lower function KabylakeRvp3BoardDetect() will read the ID from the EC using the LPC bus. 
+- Then is updates LibPcdSetSku() with the Board ID
+- LibPcdGetSku() can then be used elsewhere
+
+- The EC implements an embedded controller interface at ports 0x60/0x64 and a ACPI compliant
+system management controller at ports 0x62/0x66. Port 0x66 is the command and status port,
+port 0x62 is the data port.
+
+- Another NOTE: The SKU ID check should only happen in board specific drivers. The SKU ID check is NOT allowed in any common board code or common platform code. 
+
+
+- SkuIds is a special usage of PCD. It can support multiple configurations generated at build time, and it supports runtime selection to make one configuration take effect finally. 
+- Multi-sku PCD concept is defined by PI specification Volume 3, Chapter 8 PCD, EFI_PCD_PROTOCOL.SetSku () 
+
+
+
+---?image=assets/images/slides/Slide10.JPG
+@title[Minimum Platform Architecture Summary Section]
+<br>
+<p align="left"><span class="gold" >@size[1.1em](<b>Minimum Platform <br>Architecture <br>Summary</b>)</span></span></p>
 
 @snap[north-east span-35 ]
 <br>
 <br>
 
 <ul style="list-style-type:disc; line-height:0.7;">
-  <li><span style="font-size:0.65em" >Minimal /Full BIOS </span> </li>
+  <li><span style="font-size:0.65em" >Staged Minimal Baseline </span> </li>
   <li><span style="font-size:0.65em" >Feature ON/OFF </span> </li>
   <ul style="list-style-type:disc; line-height:0.6;">
-  <li><span style="font-size:0.6em" >SMBIOS</span> </li>
-  <li><span style="font-size:0.6em" >TPM </span> </li>
-  <li><span style="font-size:0.6em" >Secure Boot </span> </li>
+  <li><span style="font-size:0.6em" >Debug</span> </li>
+  <li><span style="font-size:0.6em" >I/O Devices  </span> </li>
+  <li><span style="font-size:0.6em" >User Interface </span> </li>
   <li><span style="font-size:0.6em" >. . . </span> </li>
   </ul>
 </ul>
@@ -3373,8 +3731,8 @@ The PlatformInit folder (Intel/MinPlatformPkg/PlatformInit) - PlatformInitPei, P
 @snap[south-west span-30 ]
 <br>
 <ul style="list-style-type:disc; line-height:0.7;">
-  <li><span style="font-size:0.65em" >Setup Variable</span> </li>
-  <li><span style="font-size:0.65em" >PCD </span> </li>
+  <li><span style="font-size:0.65em" >Staged</span> </li>
+  <li><span style="font-size:0.65em" >Defined PCD </span> </li>
   <li><span style="font-size:0.65em" >Policy Hob/PPI/Protocol </span> </li>
 </ul>
 <br>
@@ -3385,6 +3743,7 @@ The PlatformInit folder (Intel/MinPlatformPkg/PlatformInit) - PlatformInitPei, P
 @snap[south-east span-33 ]
 <br>
 <ul style="list-style-type:disc; line-height:0.7;">
+  <li><span style="font-size:0.65em" >Staged </span> </li>
   <li><span style="font-size:0.65em" >GPIO </span> </li>
   <li><span style="font-size:0.65em" >SIO </span> </li>
   <li><span style="font-size:0.65em" >ACPI </span> </li>
@@ -3399,13 +3758,13 @@ The PlatformInit folder (Intel/MinPlatformPkg/PlatformInit) - PlatformInitPei, P
 
 
 Note:
-
 In order to provide suggestions on the problem statements earilier, we need to focus on the following four areas: 
 
 - Feature. How does a BIOS provide the feature selection option to a developer? 
 - Configuration. From which interface can a platform module get the configuration data? 
 - Porting. Where are the modules to be ported for a new board? 
 - Tree Structure. What does an EDKII platform package look like? 
+
 
 ---  
 @title[summary]
@@ -3415,9 +3774,9 @@ In order to provide suggestions on the problem statements earilier, we need to f
 <!---  Add bullets using https://fontawesome.com/cheatsheet certificate
 -->
 <ul style="list-style-type:none">
- <li>@fa[certificate gp-bullet-yellow]<span style="font-size:0.9em">&nbsp;&nbsp;Introduce Minimum Platform Architecture (MPA)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> </li>
- <li>@fa[certificate gp-bullet-green]<span style="font-size:0.9em">&nbsp;&nbsp;Explain the EDK II Open board platforms <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;infrastructure  & focus areas</span> </li>
- <li>@fa[certificate gp-bullet-cyan]<span style="font-size:0.9em">&nbsp;&nbsp;Describe Intel® FSP with  the EDK II open board<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;platforms </span></li>
+ <li>@fa[certificate gp-bullet-yellow]<span style="font-size:0.9em">&nbsp;&nbsp;Minimum Platform Architecture (MPA) is an Open source Intel platform code base for use with EDK II</span> </li>
+ <li>@fa[certificate gp-bullet-green]<span style="font-size:0.9em">&nbsp;&nbsp;EDK II Minplatform’s infrastructure focus areas: Tree, Features, Configuration & Porting</span> </li>
+ <li>@fa[certificate gp-bullet-cyan]<span style="font-size:0.9em">&nbsp;&nbsp;MinPlatform uses Intel® FSP for processor, silicon and memory init & uses silicon policy guildlines for data flow</span></li>
 </ul>
 
 
@@ -3480,7 +3839,27 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWIS
 ARISING IN ANY WAY OUT OF THE USE OF THIS DOCUMENTATION, EVEN IF ADVISED OF THE POSSIBILITY 
 OF SUCH DAMAGE.
 
-Copyright (c) 2019, Intel Corporation. All rights reserved.
+Copyright (c) 2020, Intel Corporation. All rights reserved.
 **/
 
 ```
+---
+<br>
+<br>
+Backup
+
+---?image=assets/images/slides/Slide81.JPG
+@title[Basic Boot Components]
+<p align="right"><span class="gold" >@size[1.1em](<b>Basic Boot Components</b>)</span><span style="font-size:0.8em;" ><br></span></p>
+
+
+
+Note:
+
+Typically all the Intel Architecture platform firmware basic boot components are almost the same. In the slide, the GREEN part means the generic EDK II core modules. 
+The YELLOW part means the silicon specific modules. And finally, the PURPLE part means the platform/board specific modules 
+
+
+In the UEFI scope, we need the variable, timer, CPU, PCI, either SATA or USB as storage, Graphic or terminal as console output, and finally, USB/PS2 Keyboard or terminal as console input. The SMM portion is required for most X86 platforms in order to support UEFI Authenticated Variables [AUTH VARIABLE]. 
+Most UEFI OSes also require ACPI, so ACPI tables and an SMM driver to enable/disable ACPI are needed. 
+The platform may also need to initiliaze General Purpose Input/Ouput (GPIO) pins or a Super IO (SIO) to enable the basic boot functionality. 
